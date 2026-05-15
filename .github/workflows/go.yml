@@ -38,6 +38,24 @@ jobs:
       run: go tool mage -v compile
     - name: Test
       run: go tool mage -v test
+  cross-compile:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v6
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version-file: 'go.work'
+        cache-dependency-path: |
+          go.mod
+          **/go.mod
+    - name: Cross-compile darwin/amd64
+      run: GOOS=darwin GOARCH=amd64 go build ./...
+    - name: Cross-compile darwin/arm64
+      run: GOOS=darwin GOARCH=arm64 go build ./...
+    - name: Cross-compile windows/amd64
+      run: GOOS=windows GOARCH=amd64 go build ./...
   lint:
     # don't need to run lint per-platform for now
     runs-on: ubuntu-24.04
