@@ -1,3 +1,3 @@
-FROM node:lts-slim
+FROM node:22-slim@sha256:689c11043dad91472750cd824c97dd5e2318e9dd6f954e492fe7af0135d33ceb
 COPY app /app
 ENTRYPOINT [ "node", "/app" ]

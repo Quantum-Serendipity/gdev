@@ -14,4 +14,4 @@ builds:
 baseImageOverrides:
   # add our app to the atlas image as a lazy hack instead of making a separate
   # atlas image. migrations will be included via ko-data trickery.
-  fastcat.org/go/gdev/examples/full-stack/ent-blog: arigaio/atlas:latest-alpine
+  fastcat.org/go/gdev/examples/full-stack/ent-blog: arigaio/atlas:latest-alpine@sha256:cc1d07f9ed605d6364580779673f5712dfbc3dab5bcc0a74e40b80d0c3296334

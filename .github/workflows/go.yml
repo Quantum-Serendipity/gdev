@@ -22,10 +22,14 @@ jobs:
           - ubuntu-24.04-arm # arm64
     runs-on: ${{ matrix.platform }}
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@ab7a9404c0f3da075243ca237b5fac12c98deaa5 # v2
+      with:
+        egress-policy: audit
     - name: Checkout Code
-      uses: actions/checkout@v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Set up Go
-      uses: actions/setup-go@v6
+      uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
       with:
         go-version-file: 'go.work'
         cache-dependency-path: |
@@ -38,14 +42,40 @@ jobs:
       run: go tool mage -v compile
     - name: Test
       run: go tool mage -v test
+  cross-compile:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@ab7a9404c0f3da075243ca237b5fac12c98deaa5 # v2
+      with:
+        egress-policy: audit
+    - name: Checkout Code
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+    - name: Set up Go
+      uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
+      with:
+        go-version-file: 'go.work'
+        cache-dependency-path: |
+          go.mod
+          **/go.mod
+    - name: Cross-compile darwin/amd64
+      run: GOOS=darwin GOARCH=amd64 go build ./...
+    - name: Cross-compile darwin/arm64
+      run: GOOS=darwin GOARCH=arm64 go build ./...
+    - name: Cross-compile windows/amd64
+      run: GOOS=windows GOARCH=amd64 go build ./...
   lint:
     # don't need to run lint per-platform for now
     runs-on: ubuntu-24.04
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@ab7a9404c0f3da075243ca237b5fac12c98deaa5 # v2
+      with:
+        egress-policy: audit
     - name: Checkout Code
-      uses: actions/checkout@v6
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
     - name: Set up Go
-      uses: actions/setup-go@v6
+      uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
       with:
         go-version-file: 'go.work'
         # include the golangci config in the go cache hash so that we don't
@@ -63,7 +93,7 @@ jobs:
         git diff --exit-code
 
     - name: Golangci-lint
-      uses: golangci/golangci-lint-action@v9
+      uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9
       # can use latest release nowadays
     - name: Other Lint
       run: go tool mage -v lint:other
