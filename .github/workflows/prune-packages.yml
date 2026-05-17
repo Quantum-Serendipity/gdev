@@ -13,20 +13,24 @@ jobs:
   prune:
     runs-on: ubuntu-24.04
     steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@ab7a9404c0f3da075243ca237b5fac12c98deaa5 # v2
+      with:
+        egress-policy: audit
     - name: Prune gdev/svc1
-      uses: actions/delete-package-versions@v5
+      uses: actions/delete-package-versions@25ad4af5be03aef10e0b3376b248688b7a44c40b # v5
       with:
         package-name: "gdev/svc1"
         package-type: "container"
         min-versions-to-keep: 2
     - name: Prune gdev/svc2
-      uses: actions/delete-package-versions@v5
+      uses: actions/delete-package-versions@25ad4af5be03aef10e0b3376b248688b7a44c40b # v5
       with:
         package-name: "gdev/svc2"
         package-type: "container"
         min-versions-to-keep: 2
     - name: Prune gdev/ent-blog
-      uses: actions/delete-package-versions@v5
+      uses: actions/delete-package-versions@25ad4af5be03aef10e0b3376b248688b7a44c40b # v5
       with:
         package-name: "gdev/ent-blog"
         package-type: "container"
